@@ -6,7 +6,7 @@ def is_sorted(items):
     Running time: O(n) because we have to go through the array once.
     Memory usage: 0 because we only look at the array"""
     # iterate through the items in the array in pairs
-    for i in range(items - 1):
+    for i in range(len(items) - 1):
         # check if the first item is greater than the latter
         if items[i] > items[i + 1]:
             # if so return false
