@@ -3,8 +3,8 @@
 
 def is_sorted(items):
     """Return a boolean indicating whether given items are in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    TODO: Running time: O(n) because we have to go through the array once.
+    TODO: Memory usage: 0 because we only look at the array"""
     for i in range(items - 1):
         if items[i] > items[i + 1]:
             return False
@@ -45,9 +45,24 @@ def selection_sort(items):
 
 def insertion_sort(items):
     """Sort given items by taking first unsorted item, inserting it in sorted
-    order in front of items, and repeating until all items are in order.
+    order in front of items, and repeating until all items are in order.`
     TODO: Running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
     # TODO: Repeat until all items are in sorted order
     # TODO: Take first unsorted item
     # TODO: Insert it in sorted order in front of items
+    prev = None
+    for i, item in enumerate(items):
+        if prev == None:
+            prev = item
+        else:
+            if item > prev:
+                prev = item
+            else:
+                # find its new place in the sorted part
+                for j in range(i):
+                    if item < items[j]:
+                        items.insert(j, item)
+                        items.pop(i + 1)
+                        break
+                prev = items[i]
