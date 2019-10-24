@@ -4,7 +4,8 @@
 def is_sorted(items):
     """Return a boolean indicating whether given items are in sorted order.
     Running time: O(n) because we have to go through the array once.
-    Memory usage: 0 because we only look at the array"""
+    Memory usage: O(1) because we only declare one variable, i"""
+
     # iterate through the items in the array in pairs
     for i in range(len(items) - 1):
         # check if the first item is greater than the latter
@@ -20,6 +21,7 @@ def bubble_sort(items):
     repeating until all items are in sorted order.
     Running time: O(n^2) because we have to iterate through the array n times.
     Memory usage: 1, swaps happen in place, but flags are stored"""
+
     # create a bool to indicate if the list is sorted
     is_sorted = False
     # keep track of the iteration so we can ignore the already sorted items
@@ -64,7 +66,7 @@ def insertion_sort(items):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
     Running time: O(n^2) because for each item (O(n)) we need to find its place 
-    in the sorted array (O(n)) and then insert it (O(n)). Really 2*O(n).
+    in the sorted array (O(n)) and then insert it (O(n)). Really 2*O(n^2).
     Memory usage: O(1) because we only keep track of the item, prev, and index."""
 
     # keep track of the previous item
