@@ -57,7 +57,7 @@ def selection_sort(items):
     # iterate through i in the len of items to keep track of the length of the sorted part
     for i in range(len(items)):
         # find the index of the minimum element
-        min_index = items.index(min(items[i:]))
+        min_index = items[i:].index(min(items[i:])) + i
         # swap the minimum element with the first unsorted item
         items[i], items[min_index] = items[min_index], items[i]
 
