@@ -1,7 +1,7 @@
 #!python
 
 
-def is_sorted(items):
+def is_sorted(items, reverse=False, key=lambda item: item):
     """Return a boolean indicating whether given items are in sorted order.
     Running time: O(n) because we have to go through the array once.
     Memory usage: O(1) because we only declare one variable, i"""
@@ -9,14 +9,16 @@ def is_sorted(items):
     # iterate through the items in the array in pairs
     for i in range(len(items) - 1):
         # check if the first item is greater than the latter
-        if items[i] > items[i + 1]:
+        if key(items[i]) > key(items[i + 1]) and reverse is False:
             # if so return false
             return False
-    # if we've made it through the array with no items greater than their followers return true
+        elif key(items[i]) < key(items[i + 1]) and reverse is True:
+            return False
+            # if we've made it through the array with no items greater than their followers return true
     return True
 
 
-def bubble_sort(items):
+def bubble_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by swapping adjacent items that are out of order, and
     repeating until all items are in sorted order.
     Running time: O(n^2) because we have to iterate through the array n times.
@@ -45,8 +47,11 @@ def bubble_sort(items):
             # if so is_sorted is True so we can stop sorting
             is_sorted = True
 
+    if reverse is True:
+        items = items[::-1]
 
-def selection_sort(items):
+
+def selection_sort(items, reverse=False):
     """Sort given items by finding minimum item, swapping it with first
     unsorted item, and repeating until all items are in sorted order.
     Running time: O(n^2) always because we need to find the minimum 
@@ -61,8 +66,11 @@ def selection_sort(items):
         # swap the minimum element with the first unsorted item
         items[i], items[min_index] = items[min_index], items[i]
 
+    if reverse is True:
+        items = items[::-1]
 
-def insertion_sort(items):
+
+def insertion_sort(items, reverse=False):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
     Running time: O(n^2) because for each item (O(n)) we need to find its place 
@@ -97,3 +105,6 @@ def insertion_sort(items):
                         break
                 # set prev to the last sorted item
                 prev = items[i]
+
+    if reverse is True:
+        items = items[::-1]
