@@ -35,7 +35,7 @@ def bubble_sort(items, reverse=False, key=lambda item: item):
         # iterate through the array in pairs
         for i in range(len(items) - iteration - 1):
             # check if the former item is greater
-            if items[i] > items[i + 1]:
+            if key(items[i]) > key(items[i + 1]):
                 # if so swap them
                 items[i], items[i + 1] = items[i + 1], items[i]
                 # set has_swap to True
@@ -51,7 +51,7 @@ def bubble_sort(items, reverse=False, key=lambda item: item):
         items = items[::-1]
 
 
-def selection_sort(items, reverse=False):
+def selection_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by finding minimum item, swapping it with first
     unsorted item, and repeating until all items are in sorted order.
     Running time: O(n^2) always because we need to find the minimum 
@@ -62,7 +62,7 @@ def selection_sort(items, reverse=False):
     # iterate through i in the len of items to keep track of the length of the sorted part
     for i in range(len(items)):
         # find the index of the minimum element
-        min_index = items[i:].index(min(items[i:])) + i
+        min_index = items[i:].index(min(items[i:], key=key)) + i
         # swap the minimum element with the first unsorted item
         items[i], items[min_index] = items[min_index], items[i]
 
@@ -70,7 +70,7 @@ def selection_sort(items, reverse=False):
         items = items[::-1]
 
 
-def insertion_sort(items, reverse=False):
+def insertion_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
     Running time: O(n^2) because for each item (O(n)) we need to find its place 
@@ -88,7 +88,7 @@ def insertion_sort(items, reverse=False):
         # otherwise
         else:
             # check if the item is greater than the prev
-            if item > prev:
+            if key(item) > key(prev):
                 # if so set prev to item and continue
                 prev = item
             # otherwise we have to find its new place in the sorted part and insert it
@@ -96,7 +96,7 @@ def insertion_sort(items, reverse=False):
                 # iterate through the sorted items in sorted part
                 for j in range(i):
                     # if the sorted item is less than the item
-                    if item < items[j]:
+                    if key(item) < key(items[j]):
                         # inser the item in its position
                         items.insert(j, item)
                         # remove the item from its original position
