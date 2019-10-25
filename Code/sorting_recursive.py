@@ -4,11 +4,27 @@
 def merge(items1, items2):
     """Merge given lists of items, each assumed to already be in sorted order,
     and return a new list containing all items in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Repeat until one list is empty
-    # TODO: Find minimum item in both lists and append it to new list
-    # TODO: Append remaining items in non-empty list to new list
+    Running time: O(n) always because we have to go through each element in both arrays once
+    Memory usage: O(n) because we have to create a new array that is the size of the input"""
+
+    i1 = 0
+    i2 = 0
+    merged_list = []
+    while i1 != len(items1) or i2 != len(items2):
+        if i1 == len(items1):
+            merged_list.append(items2[i2])
+            i2 += 1
+        elif i2 == len(items2):
+            merged_list.append(items1[i1])
+            i1 += 1
+        elif items1[i1] < items2[i2]:
+            merged_list.append(items1[i1])
+            i1 += 1
+        else:  # items2[i2] <= items1[i1]
+            merged_list.append(items2[i2])
+            i2 += 1
+        print(i1, i2)
+    return merged_list
 
 
 def split_sort_merge(items):
@@ -27,10 +43,6 @@ def merge_sort(items):
     sorting each recursively, and merging results into a list in sorted order.
     TODO: Running time: ??? Why and under what conditions?
     TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Check if list is so small it's already sorted (base case)
-    # TODO: Split items list into approximately equal halves
-    # TODO: Sort each half by recursively calling merge sort
-    # TODO: Merge sorted halves into one list in sorted order
 
 
 def partition(items, low, high):
