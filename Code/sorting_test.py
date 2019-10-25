@@ -5,6 +5,7 @@ from sorting_iterative import is_sorted, bubble_sort, selection_sort, insertion_
 from sorting_recursive import split_sort_merge, merge_sort, quick_sort
 from sorting_integer import counting_sort, bucket_sort
 import unittest
+from inspect import getfullargspec
 
 
 class IsSortedTest(unittest.TestCase):
@@ -175,6 +176,32 @@ class IntegerSortTest(unittest.TestCase):
         sort(items3)  # Mutate
         assert items3 == sorted_items3
 
+    def test_sort_with_reverse_true(self):
+        pass
+
+    def test_sort_with_custom_key(self):
+        # this allows me to check if sort has a 'key' argument
+        arguments = getfullargspec(sort).args
+        if 'key' not in arguments:
+            return
+
+        def second_int(items_tuple): return items_tuple[1]
+        items1 = [(1, 5), (2, 4), (3, 3), (4, 2), (5, 1)]
+        sort(items1, key=second_int)
+        assert items1 == [(5, 1), (4, 2), (3, 3), (2, 4), (1, 5)]
+        items2 = [(100, 11), (12, 3), (11, 0), (120, -10)]
+        sort(items2, key=sum)
+        assert items2 == [(11, 0), (12, 3), (120, -10), (100, 11)]
+        items3 = [(1, 5, 1, 0), (1, 3, -4, 1), (10, 22, 40)]
+        sort(items3, key=min)
+        assert items3 == [(1, 3, -4, 1), (1, 5, 1, 0), (10, 22, 40)]
+
+    def test_sort_with_custom_key_and_reversed_true(self):
+        arguments = getfullargspec(sort).args
+        if 'key' not in arguments:
+            return
+        pass
+
 
 class StringSortTest(unittest.TestCase):
 
@@ -234,7 +261,15 @@ def get_sort_function():
 
 
 # If using PyTest, change this variable to the sort function you want to test
-sort = bubble_sort
+sort = merge_sort
+
+if sort == merge_sort:
+    def impure_merge_sort(items):
+        sorted_items = merge_sort(items)
+        for i, item in enumerate(sorted_items):
+            items[i] = item
+
+    sort = impure_merge_sort
 
 
 if __name__ == '__main__':
