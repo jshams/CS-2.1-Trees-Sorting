@@ -31,11 +31,20 @@ def split_sort_merge(items):
     """Sort given items by splitting list into two approximately equal halves,
     sorting each with an iterative sorting algorithm, and merging results into
     a list in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Split items list into approximately equal halves
-    # TODO: Sort each half using any other sorting algorithm
-    # TODO: Merge sorted halves into one list in sorted order
+    Running time: O(2(n/2)^2) if the sorting algorithm takes O(n^2) time.
+    This still equates to O(n) time, but as we scale it gets exponentially slower.
+    For instance 4^2 = 16, but (4/2^2) = 4. 100^2 = 10000, but 50^2 = 2500
+    Memory usage: ??? Why and under what conditions?"""
+    # Split items list into approximately equal halves
+    middle = len(items // 2)
+    first_half = items[:middle]
+    second_half = items[middle:]
+    # Sort each half using any other sorting algorithm
+    first_half = merge_sort(first_half)
+    second_half = merge_sort(second_half)
+    # Merge sorted halves into one list in sorted order
+    merged_halves = merge(first_half, second_half)
+    return merged_halves
 
 
 def merge_sort(items):
