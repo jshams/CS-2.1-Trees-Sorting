@@ -25,15 +25,15 @@ def bubble_sort(items, reverse=False, key=lambda item: item):
     Memory usage: 1, swaps happen in place, but flags are stored"""
 
     # create a bool to indicate if the list is sorted
-    is_sorted = False
+    items_is_sorted = False
     # keep track of the iteration so we can ignore the already sorted items
-    iteration = 0
+    iteration = 1
     # repeat bubble sort until items is sorted or when iterations is equal to the length of items - 1
-    while not is_sorted or iteration == len(items) - 1:
+    while not items_is_sorted or iteration == len(items):
         # keep track of if there is a swap (if there's no swap items is sorted)
         had_swap = False
         # iterate through the array in pairs
-        for i in range(len(items) - iteration - 1):
+        for i in range(len(items) - iteration):
             # check if the former item is greater
             if key(items[i]) > key(items[i + 1]):
                 # if so swap them
@@ -44,8 +44,8 @@ def bubble_sort(items, reverse=False, key=lambda item: item):
         iteration += 1
         # check if no swap happened
         if not had_swap:
-            # if so is_sorted is True so we can stop sorting
-            is_sorted = True
+            # if so items_is_sorted is True so we can stop sorting
+            items_is_sorted = True
 
     if reverse is True:
         items = items[::-1]
@@ -92,6 +92,20 @@ def insertion_sort(items, reverse=False, key=lambda item: item):
                 # if so set prev to item and continue
                 prev = item
             # otherwise we have to find its new place in the sorted part and insert it
+            # elif True is True:
+            #     items.pop(i)
+            #     max_index = i - 1
+            #     min_index = 0
+            #     index_found = False
+            #     while not index_found or min_index >= max_index:
+            #         middle_index = (min_index + max_index) // 2
+            #         if key(item) > key(items[middle_index]):
+            #             min_index = middle_index
+            #         elif key(item) < key(items[middle_index]):
+            #             max_index = middle_index
+            #         else:  # they're equal
+            #             index_found = True
+            #     items.insert(middle_index, item)
             else:
                 # iterate through the sorted items in sorted part
                 for j in range(i):
