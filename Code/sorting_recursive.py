@@ -6,7 +6,6 @@ def merge(items1, items2):
     and return a new list containing all items in sorted order.
     Running time: O(n) always because we have to go through each element in both arrays once
     Memory usage: O(n) because we have to create a new array that is the size of the input"""
-
     i1 = 0
     i2 = 0
     merged_list = []
@@ -23,7 +22,6 @@ def merge(items1, items2):
         else:  # items2[i2] <= items1[i1]
             merged_list.append(items2[i2])
             i2 += 1
-        print(i1, i2)
     return merged_list
 
 
@@ -50,8 +48,10 @@ def split_sort_merge(items):
 def merge_sort(items):
     """Sort given items by splitting list into two approximately equal halves,
     sorting each recursively, and merging results into a list in sorted order.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    Running time: O(n log(n)) because we split the list into halves taking log n time. then sort
+    them using merge taking n time.
+    Memory usage: also o(n(log n)) because we every time we split the array we cut it in half
+    and create two new arrays of size n. This happens log(n) times."""
     # Check if list is so small it's already sorted (base case)
     if len(items) <= 1:
         return items
@@ -64,8 +64,6 @@ def merge_sort(items):
         sorted_first = merge_sort(first_half)
         sorted_second = merge_sort(second_half)
         # Merge sorted halves into one list in sorted order
-        print(sorted_first)
-        print(sorted_second)
         return merge(sorted_first, sorted_second)
 
 
