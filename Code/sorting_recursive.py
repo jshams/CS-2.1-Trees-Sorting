@@ -69,16 +69,25 @@ def merge_sort(items):
 
 def partition(items, low, high):
     """Return index `p` after in-place partitioning given items in range
-    `[low...high]` by choosing a pivot (TODO: document your method here) from
-    that range, moving pivot into index `p`, items less than pivot into range
-    `[low...p-1]`, and items greater than pivot into range `[p+1...high]`.
-    TODO: Running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
-    # TODO: Choose a pivot any way and document your method in docstring above
-    # TODO: Loop through all items in range [low...high]
-    # TODO: Move items less than pivot into front of range [low...p-1]
-    # TODO: Move items greater than pivot into back of range [p+1...high]
-    # TODO: Move pivot item into final position [p] and return index p
+    `[low...high]` by choosing a pivot (the low) from that range, moving 
+    pivot into index `p`, items less than pivot into range `[low...p-1]`, and 
+    items greater than pivot into range `[p+1...high]`.
+    Running time: O(n) always because we only have to go through the array once.
+    We also only use swapping which takes constant time. (no inseting or deleting)
+    Memory usage: O(1) because we only have to keep track of the pivot index and the
+    first high index, which could also be called next low index."""
+    # Choose a pivot any way and document your method in docstring above
+    pivot_value = items[low]
+    first_high_index = low + 1
+    # Loop through all items in range [low...high]
+    for index in range(1, high):
+        # Move items less than pivot into front of range [low...p-1]
+        if items[index] < pivot_value:
+            items[first_high_index], items[index] = items[index], items[first_high_index]
+            first_high_index += 1
+    # Move pivot item into final position and return its position
+    items[first_high_index - 1], items[low] = items[low], items[first_high_index - 1]
+    return first_high_index - 1
 
 
 def quick_sort(items, low=None, high=None):
