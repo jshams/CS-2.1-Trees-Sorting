@@ -55,8 +55,8 @@ def merge_sort(items):
     # Check if list is so small it's already sorted (base case)
     if len(items) <= 1:
         return items
-    # Split items list into approximately equal halves
     else:
+        # Split items list into approximately equal halves
         middle = len(items) // 2
         first_half = items[: middle]
         second_half = items[middle:]
@@ -69,8 +69,8 @@ def merge_sort(items):
 
 def partition(items, low, high):
     """Return index `p` after in-place partitioning given items in range
-    `[low...high]` by choosing a pivot (the low) from that range, moving 
-    pivot into index `p`, items less than pivot into range `[low...p-1]`, and 
+    `[low...high]` by choosing a pivot (the low) from that range, moving
+    pivot into index `p`, items less than pivot into range `[low...p-1]`, and
     items greater than pivot into range `[p+1...high]`.
     Running time: O(n) always because we only have to go through the array once.
     We also only use swapping which takes constant time. (no inseting or deleting)
@@ -90,15 +90,17 @@ def partition(items, low, high):
     return first_high_index - 1
 
 
-def quick_sort(items, low=None, high=None):
+def quick_sort(items, low=0, high=None):
     """Sort given items in place by partitioning items in range `[low...high]`
     around a pivot item and recursively sorting each remaining sublist range.
-    TODO: Best case running time: ??? Why and under what conditions?
-    TODO: Worst case running time: ??? Why and under what conditions?
-    TODO: Memory usage: ??? Why and under what conditions?"""
+    Best case running time: O(n*log(n)). The input looks weird, but lists that are more
+    shuffled or random will sort quicker.
+    Worst case running time: O(n^2) if the list is in sorted or reverse sorted order.
+    Best case memory usage: O(log(n)) memory is consant on each iteration and best case
+    takes log(n) iterations
+    Worse case memory usage: O(n) when the most iterations occur, list is sorted."""
     # Check if high and low range bounds have default values (not given)
     if high is None:
-        low = 0
         high = len(items)
     # Check if list or range is so small it's already sorted (base case)
     if high - low <= 1:
@@ -110,7 +112,54 @@ def quick_sort(items, low=None, high=None):
     quick_sort(items, pivot_index + 1, high)
 
 
-items = [4, 9, 5, 2, 6, 8, 3, 1, 7, 0]
-print(items)
-quick_sort(items)
-print(items)
+def bogo_sort(items):
+    for perm in get_all_perms(items):
+        print('what')
+        if sorted(perm) == perm:
+            return perm
+
+
+def get_all_perms(array):
+    if len(array) < 2:
+        return array
+    if len(array) == 2:     # base case
+        return [array, [array[1], array[0]]]
+    all_perms = []
+    for i in array:
+        new_array = array[:]
+        new_array.remove(i)
+        all_perms_extension = get_all_perms(new_array)
+        for group in all_perms_extension:
+            group.insert(0, i)
+        all_perms.extend(all_perms_extension)
+    return all_perms
+
+
+if __name__ == '__main__':
+    from random import randint
+    from sys import argv
+    from time import time
+    args = argv[1:]
+    sort = quick_sort
+    n = 10
+    if len(args) > 0:
+        n = int(args[0])
+    if len(args) > 1:
+        if args[1] in 'merge sort merge sort':
+            sort = merge_sort
+        else:
+            sort = quick_sort
+    items = [randint(0, n ** 2) for _ in range(n)]
+    if n < 100:
+        print('Unsorted items:')
+        print(items)
+        sort(items)
+        print()
+        print('Sorted items:')
+        print(items)
+    else:
+        start = time()
+        sort(items)
+        finish = time()
+        total = round(finish - start, ndigits=4)
+        print('It only took', total, 'seconds!')
