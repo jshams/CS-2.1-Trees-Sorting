@@ -94,7 +94,7 @@ def selection_sort(items, reverse=False, key=lambda item: item):
         items = items[::-1]
 
 
-def find_insert_location(items, item, end, start=0):
+def find_insert_location(items, item, end, key=lambda item: item, start=0):
     '''input: items - a list of items, item - the item we want to insert
     end - the first unsorted index of items, or the last sorted index not inclusive
     start - default 0, used for
@@ -102,24 +102,23 @@ def find_insert_location(items, item, end, start=0):
     Using binary search recursively find the index to insert item in items'''
     print(start, end)
     if (end - start) <= 1:
-        if item < items[start]:
+        if key(item) < key(items[start]):
             return start
         else:
             return start + 1
     middle = (start + end) // 2
-    if item < items[middle]:
-        return find_insert_location(items, item, middle, start)
+    if key(item) < key(items[middle]):
+        return find_insert_location(items, item, middle, key, start)
     else:
-        return find_insert_location(items, item, end, middle)
+        return find_insert_location(items, item, end, key, middle)
 
 
 def insertion_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
     Running time: O(n^2) because for each item (O(n)) we need to find its place 
-    in the sorted array (O(n)) and then insert it (O(n)). Really 2*O(n^2).
+    in the sorted array (O(logn)) and then insert it (O(n)). Really O(n^2 * logn).
     Memory usage: O(1) because we only keep track of the item, prev, and index."""
-
     # keep track of the previous item
     prev = None
     # iterate through each item in items keeping track of their index
@@ -136,18 +135,10 @@ def insertion_sort(items, reverse=False, key=lambda item: item):
                 prev = item
             # otherwise we have to find its new place in the sorted part and insert it
             else:
-                # iterate through the sorted items in sorted part
-                # for j in range(i):
-                #     # if the sorted item is less than the item
-                #     if key(item) < key(items[j]):
-                #         # inser the item in its position
-                #         items.insert(j, item)
-                #         # remove the item from its original position
-                #         items.pop(i + 1)
-                #         # stop looking for a position
-                #         break
-                insert_location = find_insert_location(items, item, i)
+                insert_location = find_insert_location(items, item, i, key)
+                # remove it from its previous location
                 items.pop(i)
+                # insert it in its new location
                 items.insert(insert_location, item)
                 # set prev to the last sorted item
                 prev = items[i]
