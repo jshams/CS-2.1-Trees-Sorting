@@ -1,4 +1,5 @@
 #!python
+from random import randint
 
 
 def merge(items1, items2):
@@ -67,20 +68,57 @@ def merge_sort(items):
         return merge(sorted_first, sorted_second)
 
 
-def partition(items, low, high):
+def median(i1, i2, i3, items):
+    if items[i1] > items[i2]:
+        if items[i2] > items[i3]:
+            return i2
+        else:
+            pass
+
+
+def partition(items, low, high, pivot_index="first"):
     """Return index `p` after in-place partitioning given items in range
     `[low...high]` by choosing a pivot (the low) from that range, moving
     pivot into index `p`, items less than pivot into range `[low...p-1]`, and
     items greater than pivot into range `[p+1...high]`.
+    pivot_index param:
+    "first" - (default) will chose the frist index as the pivot
+    "last" - will chose the last index [-1] as the pivot
+    "middle" - will chose the middle index as the pivot
+    "random" - will chose a random index as the pivot
+    "outer middle" - will look at the first, middle, and last items in the arr and 
+    take the median of the three
+    "smart random" - will look at three random values and use their median as the pivot
     Running time: O(n) always because we only have to go through the array once.
     We also only use swapping which takes constant time. (no inseting or deleting)
     Memory usage: O(1) because we only have to keep track of the pivot index and the
     first high index, which could also be called next low index."""
     # Choose a pivot any way and document your method in docstring above
-    pivot_value = items[low]
+    if pivot_index == 'first':
+        pivot_value = items[low]
+    elif pivot_index == 'last':
+        pivot_value = items[high - 1]
+        items[high - 1], items[low] = items[low], items[high - 1]
+    elif pivot_index == 'middle':
+        middle_index = (low + high) // 2
+        pivot_value = items[middle_index]
+        items[middle_index], items[low] = items[low], items[middle_index]
+    elif pivot_index == 'random':
+        random_index = randint(low, high)
+        pivot_value = items[random_index]
+        items[random_index], items[low] = items[low], items[random_index]
+    elif pivot_index == 'outer middle':
+        median_index = sorted([low, (low + high) // 2, high],
+                              key=lambda i: items[i])[1]
+        pivot_value = items[median_index]
+        items[median_index], items[low] = items[low], items[median_index]
+    elif pivot_index == 'smart random':
+        pivot_index = sorted([randint(low, high)
+                              for _ in range(3)], key=lambda i: items[i])[1]
+
     first_high_index = low + 1
     # Loop through all items in range [low...high]
-    for index in range(low, high):
+    for index in range(low + 1, high):
         # Move items less than pivot into front of range [low...p-1]
         if items[index] < pivot_value:
             items[first_high_index], items[index] = items[index], items[first_high_index]
@@ -113,6 +151,7 @@ def quick_sort(items, low=0, high=None):
 
 
 def bogo_sort(items):
+    '''O(n!)'''
     for perm in get_all_perms(items):
         print('what')
         if sorted(perm) == perm:
