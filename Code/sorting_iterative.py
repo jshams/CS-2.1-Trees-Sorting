@@ -137,15 +137,18 @@ def insertion_sort(items, reverse=False, key=lambda item: item):
             # otherwise we have to find its new place in the sorted part and insert it
             else:
                 # iterate through the sorted items in sorted part
-                for j in range(i):
-                    # if the sorted item is less than the item
-                    if key(item) < key(items[j]):
-                        # inser the item in its position
-                        items.insert(j, item)
-                        # remove the item from its original position
-                        items.pop(i + 1)
-                        # stop looking for a position
-                        break
+                # for j in range(i):
+                #     # if the sorted item is less than the item
+                #     if key(item) < key(items[j]):
+                #         # inser the item in its position
+                #         items.insert(j, item)
+                #         # remove the item from its original position
+                #         items.pop(i + 1)
+                #         # stop looking for a position
+                #         break
+                insert_location = find_insert_location(items, item, i)
+                items.pop(i)
+                items.insert(insert_location, item)
                 # set prev to the last sorted item
                 prev = items[i]
 
