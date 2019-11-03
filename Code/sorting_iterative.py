@@ -18,28 +18,21 @@ def is_sorted(items, reverse=False, key=lambda item: item):
     return True
 
 
-def cocktail_shaker_sort(items, reverse=False, key=lambda item: item):
-    items_is_sorted = False
-    left = 0
-    right = len(items)
-    iteration = 0
-    print()
-    print('iter    start   end     step')
-    while not items_is_sorted:
-        has_swap = False
-        if iteration % 2 == 0:
-            start = iteration // 2
-            end = len(items) - iteration // 2
-            step = 1
+def cocktail_shaker_sort(items='jeje', reverse=False, key=lambda item: item):
+    start = 0
+    end = 6
+    for iteration in range(end):
+        step = 1 if iteration % 2 == 0 else -1
+        if step == 1:
+            print(start, end, step)
+            end -= 1
         else:
-            start = len(items) - 1 - iteration // 2
-            end = round(iteration / 2)
-            step = -1
-            # for i in range(iteration // 2, len(items) - (iteration // 2)):
-        print('\t'.join([str(item) for item in[iteration, start, end, step]]))
-        iteration += 1
-        if iteration == len(items):
-            return
+            print(end, start, step)
+            start += 1
+        if
+
+
+cocktail_shaker_sort()
 
 
 def bubble_sort(items, reverse=False, key=lambda item: item):
