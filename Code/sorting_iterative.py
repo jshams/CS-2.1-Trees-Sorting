@@ -18,6 +18,30 @@ def is_sorted(items, reverse=False, key=lambda item: item):
     return True
 
 
+def cocktail_shaker_sort(items, reverse=False, key=lambda item: item):
+    items_is_sorted = False
+    left = 0
+    right = len(items)
+    iteration = 0
+    print()
+    print('iter    start   end     step')
+    while not items_is_sorted:
+        has_swap = False
+        if iteration % 2 == 0:
+            start = iteration // 2
+            end = len(items) - iteration // 2
+            step = 1
+        else:
+            start = len(items) - 1 - iteration // 2
+            end = round(iteration / 2)
+            step = -1
+            # for i in range(iteration // 2, len(items) - (iteration // 2)):
+        print('\t'.join([str(item) for item in[iteration, start, end, step]]))
+        iteration += 1
+        if iteration == len(items):
+            return
+
+
 def bubble_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by swapping adjacent items that are out of order, and
     repeating until all items are in sorted order.
@@ -70,6 +94,25 @@ def selection_sort(items, reverse=False, key=lambda item: item):
         items = items[::-1]
 
 
+def find_insert_location(items, item, end, start=0):
+    '''input: items - a list of items, item - the item we want to insert
+    end - the first unsorted index of items, or the last sorted index not inclusive
+    start - default 0, used for
+    recursively finding the index.
+    Using binary search recursively find the index to insert item in items'''
+    print(start, end)
+    if (end - start) <= 1:
+        if item < items[start]:
+            return start
+        else:
+            return start + 1
+    middle = (start + end) // 2
+    if item < items[middle]:
+        return find_insert_location(items, item, middle, start)
+    else:
+        return find_insert_location(items, item, end, middle)
+
+
 def insertion_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by taking first unsorted item, inserting it in sorted
     order in front of items, and repeating until all items are in order.
@@ -92,20 +135,6 @@ def insertion_sort(items, reverse=False, key=lambda item: item):
                 # if so set prev to item and continue
                 prev = item
             # otherwise we have to find its new place in the sorted part and insert it
-            # elif True is True:
-            #     items.pop(i)
-            #     max_index = i - 1
-            #     min_index = 0
-            #     index_found = False
-            #     while not index_found or min_index >= max_index:
-            #         middle_index = (min_index + max_index) // 2
-            #         if key(item) > key(items[middle_index]):
-            #             min_index = middle_index
-            #         elif key(item) < key(items[middle_index]):
-            #             max_index = middle_index
-            #         else:  # they're equal
-            #             index_found = True
-            #     items.insert(middle_index, item)
             else:
                 # iterate through the sorted items in sorted part
                 for j in range(i):
