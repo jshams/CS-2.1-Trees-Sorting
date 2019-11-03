@@ -261,7 +261,7 @@ def get_sort_function():
 
 
 # If using PyTest, change this variable to the sort function you want to test
-sort = merge_sort
+sort = insertion_sort
 
 if sort == merge_sort:
     def impure_merge_sort(items):
