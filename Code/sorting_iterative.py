@@ -23,13 +23,11 @@ def cocktail_shaker_sort(items='jeje', reverse=False, key=lambda item: item):
     end = 6
     for iteration in range(end):
         step = 1 if iteration % 2 == 0 else -1
-        if step == 1:
-            print(start, end, step)
-            end -= 1
-        else:
-            print(end, start, step)
-            start += 1
-        if
+        start, end = end, start + step
+        for i in range(start, end, step):
+            if items[i] > items[i + 1]:
+                items[i], items[i + 1] = items[i+1], items[i]
+    return items
 
 
 cocktail_shaker_sort()
