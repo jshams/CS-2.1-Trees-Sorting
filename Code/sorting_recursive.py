@@ -68,12 +68,23 @@ def merge_sort(items):
         return merge(sorted_first, sorted_second)
 
 
-def median(i1, i2, i3, items):
+def find_median(items, i1, i2, i3):
     if items[i1] > items[i2]:
         if items[i2] > items[i3]:
             return i2
-        else:
-            pass
+        else:  # i2 < i1 and i2 < i3
+            if items[i1] > items[i3]:
+                return i3
+            else:  # i2 < i1 < i3
+                return i1
+    else:  # i1 < i2
+        if items[i1] > items[i3]:
+            return i1
+        else:  # i1 < i3 and i1 < i2
+            if items[i2] > items[i3]:
+                return i3
+            else:  # i1 < i2 < i3
+                return i2
 
 
 def partition(items, low, high, pivot_index="first"):
