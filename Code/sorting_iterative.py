@@ -23,16 +23,12 @@ def cocktail_shaker_sort(items, reverse=False, key=lambda item: item):
     end = len(items)
     for iteration in range(end):
         step = 1 if iteration % 2 == 0 else -1
-        print(start, end, step)
         for i in range(start, end, step):
-            if items[i] < items[i - 1]:
+            if key(items[i]) < key(items[i - 1]):
                 items[i], items[i - 1] = items[i - 1], items[i]
         end, start = start - step, end - 2 * step
-    return items
-
-
-ans = cocktail_shaker_sort([4, 2, 7, 3, 5, 7, 2])
-print(ans)
+    if reverse is True:
+        items[::] = items[::-1]
 
 
 def bubble_sort(items, reverse=False, key=lambda item: item):
@@ -65,7 +61,7 @@ def bubble_sort(items, reverse=False, key=lambda item: item):
             items_is_sorted = True
 
     if reverse is True:
-        items = items[::-1]
+        items[::] = items[::-1]
 
 
 def selection_sort(items, reverse=False, key=lambda item: item):
@@ -84,7 +80,7 @@ def selection_sort(items, reverse=False, key=lambda item: item):
         items[i], items[min_index] = items[min_index], items[i]
 
     if reverse is True:
-        items = items[::-1]
+        items[::] = items[::-1]
 
 
 def find_insert_location(items, item, end, key=lambda item: item, start=0):
@@ -93,7 +89,7 @@ def find_insert_location(items, item, end, key=lambda item: item, start=0):
     start - default 0, used for
     recursively finding the index.
     Using binary search recursively find the index to insert item in items'''
-    print(start, end)
+    # print(start, end)
     if (end - start) <= 1:
         if key(item) < key(items[start]):
             return start
@@ -123,6 +119,7 @@ def insertion_sort(items, reverse=False, key=lambda item: item):
         # otherwise
         else:
             # check if the item is greater than the prev
+            #
             if key(item) > key(prev):
                 # if so set prev to item and continue
                 prev = item
@@ -137,4 +134,4 @@ def insertion_sort(items, reverse=False, key=lambda item: item):
                 prev = items[i]
 
     if reverse is True:
-        items = items[::-1]
+        items[::] = items[::-1]
