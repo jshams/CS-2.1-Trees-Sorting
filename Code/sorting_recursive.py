@@ -159,6 +159,12 @@ def quick_sort(items, low=0, high=None, pivot_method="first"):
     quick_sort(items, pivot_index + 1, high, pivot_method)
 
 
+def stable_quick_sort(items):
+    stable_items = [(item, i) for i, item in enumerate(items)]
+    quick_sort(stable_items)
+    items[::] = [item[0] for item in stable_items]
+
+
 def bogo_sort(items):
     '''O(n!)'''
     for perm in get_all_perms(items):
