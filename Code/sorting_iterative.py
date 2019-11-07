@@ -18,19 +18,6 @@ def is_sorted(items, reverse=False, key=lambda item: item):
     return True
 
 
-def cocktail_shaker_sort(items, reverse=False, key=lambda item: item):
-    start = 1
-    end = len(items)
-    for iteration in range(end):
-        step = 1 if iteration % 2 == 0 else -1
-        for i in range(start, end, step):
-            if key(items[i]) < key(items[i - 1]):
-                items[i], items[i - 1] = items[i - 1], items[i]
-        end, start = start - step, end - 2 * step
-    if reverse is True:
-        items[::] = items[::-1]
-
-
 def bubble_sort(items, reverse=False, key=lambda item: item):
     """Sort given items by swapping adjacent items that are out of order, and
     repeating until all items are in sorted order.
@@ -60,6 +47,27 @@ def bubble_sort(items, reverse=False, key=lambda item: item):
             # if so items_is_sorted is True so we can stop sorting
             items_is_sorted = True
 
+    if reverse is True:
+        items[::] = items[::-1]
+
+
+def cocktail_shaker_sort(items, reverse=False, key=lambda item: item):
+    '''Sorts items similar to bubble sort (swapping adjacent items that are out 
+    of order) but in this algorithm we change between going forwards through
+    items, or backwards every iteration.
+    So after the first iteration the last item is sorted, and after the second
+    the first and last items will be sorted and so on.
+    Running time: O(n^2) because we have to iterate through the array n times.
+    Memory usage: O(1) because swaps happen in place.'''
+    start = 1
+    end = len(items)
+    step = 1
+    for _ in range(end):
+        for i in range(start, end, step):
+            if key(items[i]) < key(items[i - 1]):
+                items[i], items[i - 1] = items[i - 1], items[i]
+        end, start = start - step, end - 2 * step
+        step = -step
     if reverse is True:
         items[::] = items[::-1]
 
