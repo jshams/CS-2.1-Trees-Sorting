@@ -93,26 +93,31 @@ class AutoComplete():
 
 def main():
     from time import time, sleep
-    from termcolor import colored
-    print(colored('Building trie...', 'blue'))
+    # from termcolor import colored
+    blue = '\x1b[94m'
+    green = '\x1b[92m'
+    yellow = '\x1b[93m'
+    red = '\x1b[91m'
+    end = '\033[0m'
+    print(blue + 'Building trie...')
     start = time()
     ac = AutoComplete()
-    print(colored('Time to build trie:', 'blue'), colored(
-        str(round(time() - start, 3)) + ' seconds', 'green'))
-    print(colored('Number of words:', 'blue'), colored(ac.word_count, 'green'))
+    print('Time to build trie:' + green, str(
+        round(time() - start, 3)) + ' seconds')
+    print(blue + 'Number of words:' + green, ac.word_count)
     while True:
-        print(colored(
-            'Enter a lowercase prefix to find words with that prefix: \033[91m(Q to quit)', 'blue'))
-        pref = input('\033[93m')
+        print(blue + 'Enter a lowercase prefix to find words with that prefix: ' +
+              red + '(Q to quit)')
+        pref = input(yellow)
         print('\033[0m')
         if pref == 'Q':
-            print('\033[91mQuitting...\033[0m')
+            print(red + 'Quitting...' + end)
             sleep(1)
             return
         else:
             words = ac.auto_complete(pref)
-            print(' ,'.join(words))
-            print()
+            print(green, ' ,'.join(words))
+            print(blue)
 
 
 if __name__ == '__main__':
