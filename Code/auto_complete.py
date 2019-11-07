@@ -65,6 +65,7 @@ class Trie():
         return all_combos
 
     def auto_complete(self, prefix):
+        prefix = prefix.lower()
         node = self._get_final_node(prefix)
         if node is None:
             return []
@@ -90,13 +91,32 @@ class AutoComplete():
         return self.trie_tree.auto_complete(prefix)
 
 
-if __name__ == '__main__':
-    print('Building trie...')
-    from time import time
+def main():
+    from time import time, sleep
+    from termcolor import colored
+    print(colored('Building trie...', 'blue'))
     start = time()
     ac = AutoComplete()
-    print('Time to build trie:', time() - start, 'seconds')
-    print('Number of words:', ac.word_count)
+    print(colored('Time to build trie:', 'blue'), colored(
+        str(round(time() - start, 3)) + ' seconds', 'green'))
+    print(colored('Number of words:', 'blue'), colored(ac.word_count, 'green'))
+    while True:
+        print(colored(
+            'Enter a lowercase prefix to find words with that prefix: \033[91m(Q to quit)', 'blue'))
+        pref = input('\033[93m')
+        print('\033[0m')
+        if pref == 'Q':
+            print('\033[91mQuitting...\033[0m')
+            sleep(1)
+            return
+        else:
+            words = ac.auto_complete(pref)
+            print(' ,'.join(words))
+            print()
+
+
+if __name__ == '__main__':
+    main()
 
     # words = ac.auto_complete('sup')
     # print(words)
