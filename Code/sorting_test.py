@@ -268,14 +268,19 @@ def get_sort_function():
 
 
 # If using PyTest, change this variable to the sort function you want to test
-sort = cocktail_shaker_sort
+sort = merge_sort
 
-if sort == merge_sort:
-    def impure_merge_sort(items):
-        sorted_items = merge_sort(items)
+# check if the sorting algorith returns something
+if sort([1, 2]) is not None:
+    # if so we should create a new funtion that maniplulates the input
+    # with that sorting function that returns nothing
+    fruitful_sort = sort  # a fruitful function is one that returns something
+
+    def impure_sort(items):  # an impure function is one that manipulates the input
+        sorted_items = fruitful_sort(items)
         items[::] = sorted_items
 
-    sort = impure_merge_sort
+    sort = impure_sort
 
 
 if __name__ == '__main__':
