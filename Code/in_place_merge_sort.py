@@ -76,7 +76,7 @@ def in_place_merge(items, start, middle, end):
 # items = [5, 6, 7, 8, 100, 0, 1, 2, 3, 4]
 
 
-def merge(items, start, middle, end):
+def in_place_merge_2(items, start, middle, end):
     i1 = start
     i2 = middle
     for i in range(start, end):
@@ -144,4 +144,4 @@ def test(n, merge):
     print(sorted(items) == items)
 
 
-test(6, merge)
+test(6, in_place_merge_2)

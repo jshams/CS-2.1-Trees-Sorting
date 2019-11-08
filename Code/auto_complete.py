@@ -9,6 +9,9 @@ class Node():
     def __eq__(self, other):
         return self.letter == other.letter
 
+    def __len__(self):
+        return len(self.children)
+
     def add_child(self, letter):
         if letter not in self.children:
             self.children[letter] = Node(letter)
@@ -18,6 +21,7 @@ class Trie():
     def __init__(self, word_list=None):
         self.root = dict([(letter, Node(letter))
                           for letter in 'abcdefghijklmnopqrstuvwxyz'])
+        self.word_count = 0
         if word_list is not None:
             self.add_words(word_list)
 

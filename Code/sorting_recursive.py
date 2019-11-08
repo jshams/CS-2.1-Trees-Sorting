@@ -89,6 +89,10 @@ def find_median(items, i1, i2, i3):
                 return i2
 
 
+def alternative_partition(items, low, high):
+    pass
+
+
 def partition(items, low, high, pivot_method="first"):
     """Return index `p` after in-place partitioning given items in range
     `[low...high]` by choosing a pivot (the low) from that range, moving
