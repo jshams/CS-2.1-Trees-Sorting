@@ -9,7 +9,7 @@ class PrefixTreeNode:
 
     # Choose a type of data structure to store children nodes in
     # Hint: Choosing list or dict affects implementation of all child methods
-    CHILDREN_TYPE = None
+    CHILDREN_TYPE = list()
 
     def __init__(self, character=None):
         """Initialize this prefix tree node with the given character value, an
@@ -17,27 +17,33 @@ class PrefixTreeNode:
         # Character that this node represents
         self.character = character
         # Data structure to associate character keys to children node values
-        self.children = PrefixTreeNode.CHILDREN_TYPE()
+        self.children = [None] * 26
         # Marks if this node terminates a string in the prefix tree
         self.terminal = False
 
     def is_terminal(self):
         """Return True if this prefix tree node terminates a string."""
-        # TODO: Determine if this node is terminal
+        # Determine if this node is terminal
+        return self.terminal
 
     def num_children(self):
         """Return the number of children nodes this prefix tree node has."""
-        # TODO: Determine how many children this node has
+        # Determine how many children this node has
+        return len([node for node in self.children is node is not None])
 
     def has_child(self, character):
         """Return True if this prefix tree node has a child node that
         represents the given character amongst its children."""
         # TODO: Check if given character is amongst this node's children
+        index = ord(character.lower()) - 97
+        return self.children[index] is not None
 
     def get_child(self, character):
         """Return this prefix tree node's child node that represents the given
         character if it is amongst its children, or raise ValueError if not."""
         if self.has_child(character):
+            index = ord(character.lower()) - 97
+            return self.children[index]
             # TODO: Find child node for given character in this node's children
         else:
             raise ValueError(f'No child exists for character {character!r}')
