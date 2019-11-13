@@ -202,7 +202,8 @@ def time_it():
     from time import time, sleep
     start = time()
     ac = AutoComplete()
-    print('Time to build trie (Lists): {} seconds'.format(str(
+    node_type = 'dicts' if Node == DictNode else 'lists'
+    print('Time to build trie ({}) : {} seconds'.format(node_type, str(
         round(time() - start, 3))))
     start = time()
     for letter in 'abcdefghijklmnopqrstuvwxyz':
@@ -216,6 +217,6 @@ def time_it():
 
 if __name__ == '__main__':
     # Node = DictNode
-    Node = DictNode
+    Node = ListNode
     # main()
     time_it()
