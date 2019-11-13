@@ -26,6 +26,10 @@ class DictNode():
     def get_child(self, letter):
         return self.children[letter]
 
+    def get_children(self):
+        for node in self.children.values():
+            yield node
+
 
 class ListNode():
     def __init__(self, letter):
@@ -56,8 +60,13 @@ class ListNode():
     def is_terminal(self):
         return self.terminal
 
+    def get_children(self):
+        for child in self.children:
+            if child is not None:
+                yield child
 
-Node = ListNode
+
+Node = DictNode
 
 
 class Trie():
@@ -97,7 +106,7 @@ class Trie():
                 node = self.root[letter]
                 first_letter = False
             else:
-                if letter in node.children:
+                if node.has_child(letter):
                     node = node.get_child(letter)
                 else:
                     return None
@@ -107,9 +116,9 @@ class Trie():
         all_combos = []
         if node.is_terminal():
             all_combos.append(prefix)
-        for child in node.children:
+        for child in node.get_children():
             all_combos.extend(self._get_all_children(
-                node.get_child(child), prefix + child))
+                child, prefix + child.letter))
         return all_combos
 
     def auto_complete(self, prefix):
@@ -161,21 +170,20 @@ def main():
         print(blue + 'Enter a lowercase prefix to find words with that prefix: ' +
               red + '(Q to quit)')
         pref = input(yellow)
-        print('\033[0m')
+        print(end)
         if pref == 'Q':
             print(red + 'Quitting...' + end)
             sleep(1)
             return
         else:
             words = ac.auto_complete(pref)
-            words = [word if 'supreme' not in word else red +
-                     word + green for word in words]
-            print(green + ' ,'.join(words))
+            # words = [word if 'supreme' not in word else red +
+            #          word + green for word in words]
+            print(green + ', '.join(words))
             print(blue)
 
 
 if __name__ == '__main__':
     main()
-
     # words = ac.auto_complete('sup')
     # print(words)
