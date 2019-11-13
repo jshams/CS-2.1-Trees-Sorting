@@ -1,7 +1,8 @@
-class Node():
+class DictNode():
     def __init__(self, letter):
         self.letter = letter
         self.children = dict()
+        self.terminal = False
 
     def __hash__(self):
         return hash(self.letter)
@@ -12,9 +13,51 @@ class Node():
     def __len__(self):
         return len(self.children)
 
+    def is_terminal(self):
+        return self.terminal
+
+    def has_child(self, letter):
+        return letter in self.children
+
     def add_child(self, letter):
-        if letter not in self.children:
+        if not self.has_child(letter):
             self.children[letter] = Node(letter)
+
+    def get_child(self, letter):
+        return self.children[letter]
+
+
+class ListNode():
+    def __init__(self, letter):
+        self.letter = letter
+        self.children = [None] * 26
+        self.terminal = False
+
+    def get_char_index(self, letter):
+        return ord(letter.lower()) - 97
+
+    def has_child(self, letter):
+        letter_index = self.get_char_index(letter)
+        return self.children[letter_index] is not None
+
+    def add_child(self, letter):
+        letter_index = self.get_char_index(letter)
+        try:
+            if self.children[letter_index] is None:
+                new_child_node = ListNode(letter)
+                self.children[letter_index] = new_child_node
+        except IndexError:
+            print(letter_index, '"'+letter+'"')
+
+    def get_child(self, letter):
+        letter_index = self.get_char_index(letter)
+        return self.children[letter_index]
+
+    def is_terminal(self):
+        return self.terminal
+
+
+Node = ListNode
 
 
 class Trie():
@@ -33,13 +76,15 @@ class Trie():
         first_letter = True
         node = None
         for letter in word:
-            if first_letter:
+            if not letter.isalpha():
+                continue
+            elif first_letter:
                 node = self.root[letter]
                 first_letter = False
             else:
                 node.add_child(letter)
-                node = node.children[letter]
-        node.children['end'] = None
+                node = node.get_child(letter)
+        node.terminal = True
 
     def _get_final_node(self, prefix):
         first_letter = True
@@ -53,19 +98,18 @@ class Trie():
                 first_letter = False
             else:
                 if letter in node.children:
-                    node = node.children[letter]
+                    node = node.get_child(letter)
                 else:
                     return None
         return node
 
     def _get_all_children(self, node, prefix):
         all_combos = []
+        if node.is_terminal():
+            all_combos.append(prefix)
         for child in node.children:
-            if child is 'end':
-                all_combos.append(prefix)
-            else:
-                all_combos.extend(self._get_all_children(
-                    node.children[child], prefix + child))
+            all_combos.extend(self._get_all_children(
+                node.get_child(child), prefix + child))
         return all_combos
 
     def auto_complete(self, prefix):
@@ -95,6 +139,10 @@ class AutoComplete():
         return self.trie_tree.auto_complete(prefix)
 
 
+preme_words = ['archisupreme', 'presupreme', 'supersupreme',
+               'supreme', 'supremely', 'supremeness', 'unsupreme']
+
+
 def main():
     from time import time, sleep
     # from termcolor import colored
@@ -120,7 +168,9 @@ def main():
             return
         else:
             words = ac.auto_complete(pref)
-            print(green, ' ,'.join(words))
+            words = [word if 'supreme' not in word else red +
+                     word + green for word in words]
+            print(green + ' ,'.join(words))
             print(blue)
 
 
