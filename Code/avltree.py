@@ -50,10 +50,20 @@ class AVLNode(object):
             return self.right.height - self.left.height
 
     def right_rotate(self):
-        pass
+        left_node = self.left
+        self.left = left_node.right
+        left_node.right = self
+        self.update_height()
+        left_node.update_height()
+        return left_node
 
     def left_rotate(self):
-        pass
+        right_node = self.right
+        self.right = right_node.left
+        right_node.left = self
+        self.update_height()
+        right_node.update_height()
+        return right_node
 
 
 class AVLTree(object):
