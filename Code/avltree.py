@@ -154,6 +154,53 @@ class AVLTree(object):
         # return the new root so the parent can update its child
         return new_root
 
+    def items_in_order(self):
+        items = []
+        if not self.is_empty():
+            # Traverse tree in-order from root, appending each node's item
+            self._traverse_in_order_recursive(self.root, items.append)
+        # Return in-order list of all items in tree
+        return items
+
+    def items_level_order(self):
+        items = []
+        if not self.is_empty():
+            # Traverse tree in-order from root, appending each node's item
+            self._traverse_level_order(self.root, items.append)
+        # Return level-order list of all items in tree
+        return items
+
+    def _traverse_level_order(self, start_node, visit):
+        """Traverse this binary tree with iterative level-order traversal (BFS).
+        Start at the given node and visit each node with the given function.
+        Running time: O(n) because we must visit each node
+        Memory usage: Worse case: O(n) if all the nodes are children of one another"""
+        # Create queue to store nodes not yet traversed in level-order
+        queue = deque()
+        # Enqueue given starting node
+        queue.append(start_node)
+        # Loop until queue is empty
+        while len(queue) is not 0:
+            # Dequeue node at front of queue
+            node = queue.popleft()
+            # Visit this node's data with given function
+            visit(node.data)
+            # Enqueue this node's left child, if it exists
+            if node.left is not None:
+                queue.append(node.left)
+            # Enqueue this node's right child, if it exists
+            if node.right is not None:
+                queue.append(node.right)
+
+    def _traverse_in_order_recursive(self, node, visit):
+        if node.has_left():
+            self._traverse_in_order_recursive(node.left, visit)
+        # Visit this node's data with given function
+        visit(node.data)
+        # Traverse right subtree, if it exists
+        if node.has_right():
+            self._traverse_in_order_recursive(node.right, visit)
+
 
 if __name__ == '__main__':
     at = AVLTree([1, 7, 5, 8, 6, 15, 4])
