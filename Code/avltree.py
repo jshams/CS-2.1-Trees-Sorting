@@ -67,5 +67,39 @@ class AVLTree(object):
     def is_empty(self):
         return self.root is None
 
-    def insert(self, item):
+    def insert(self, item, node=None):
+        if self.root is None:
+            self.root = AVLNode(item)
+            self.size += 1
+        if node is None:
+            node = self.root
+            self.size += 1
+        if item == node.data:
+            self.size -= 1
+            return
+        elif item < node.data:
+            # check if there is something in the nodes left spot
+            if node.has_left():
+                # if so recursively call insert on that node
+                self.insert(item, node.left)
+            # otherwise
+            else:
+                # add the new node to the left
+                new_node = AVLNode(item)
+                node.left = new_node
+        else:
+            # check if there is something in the nodes right spot
+            if node.has_right():
+                # if so recursively call insert on that node and store its subtree
+                self.insert(item, node.right)
+            # otherwise
+            else:
+                # add the new node to the right
+                pass
+        # update the weights of the node
+        node.update_height()
+        # balance the node's subtrees
+        self.balance(node)
+
+    def balance(self, node):
         pass
