@@ -90,8 +90,12 @@ class AVLTree(object):
         elif item < node.data:
             # check if there is something in the nodes left spot
             if node.has_left():
-                # if so recursively call insert on that node
-                self.insert(item, node.left)
+                # if so recursively call insert on that node and store its subtree
+                new_subtree = self.insert(item, node.left)
+                # check if a new subtree was returned by the insertion
+                if new_subtree is not None:
+                    # if so update its left child with the new subtree
+                    node.left = new_subtree
             # otherwise
             else:
                 # add the new node to the left
@@ -101,15 +105,20 @@ class AVLTree(object):
             # check if there is something in the nodes right spot
             if node.has_right():
                 # if so recursively call insert on that node and store its subtree
-                self.insert(item, node.right)
+                new_subtree = self.insert(item, node.right)
+                # check if a new subtree was returned by the insertion
+                if new_subtree is not None:
+                    # if so update its left child with the new subtree
+                    node.right = new_subtree
             # otherwise
             else:
                 # add the new node to the right
-                pass
+                new_node = AVLNode(item)
+                node.right = new_node
         # update the weights of the node
         node.update_height()
         # balance the node's subtrees
-        self.balance(node)
+        return self.balance(node)
 
     def balance(self, node):
         # get the node's balance factor
@@ -123,16 +132,28 @@ class AVLTree(object):
             # If item is less than the node.left
             if node.left.balance_factor() < 0:
                 # left-left case
-                pass
+                new_root = node.right_rotate()
             else:  # item is greater than the node.left
                 # left-right case
-                pass
+                node.left = node.left.left_rotate()
+                new_root = node.right_rotate()
         else:  # balance factor is positive (tree skewed right)
             # If item is less than node.right.data
             if node.right.balance_factor() > 0:
                 # right-right case,
-                pass
+                new_root = node.left_rotate()
             # if item is greater than the node.right.data
             else:
                 # right-Left case
-                pass
+                node.right = node.right.right_rotate()
+                new_root = node.left_rotate()
+        # if the node is already our root
+        if node is self.root:
+            # update the root
+            self.root = new_root
+        # return the new root so the parent can update its child
+        return new_root
+
+
+if __name__ == '__main__':
+    at = AVLTree([1, 7, 5, 8, 6, 15, 4])
