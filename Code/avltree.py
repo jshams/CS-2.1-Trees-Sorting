@@ -102,4 +102,27 @@ class AVLTree(object):
         self.balance(node)
 
     def balance(self, node):
-        pass
+        # get the node's balance factor
+        balance_factor = node.balance_factor()
+        # check if the node's subtree is balanced
+        if abs(balance_factor) < 2:
+            # if it is return nothing
+            return None
+        # check if the tree is skewed left
+        if balance_factor < -1:
+            # If item is less than the node.left
+            if node.left.balance_factor() < 0:
+                # left-left case
+                pass
+            else:  # item is greater than the node.left
+                # left-right case
+                pass
+        else:  # balance factor is positive (tree skewed right)
+            # If item is less than node.right.data
+            if node.right.balance_factor() > 0:
+                # right-right case,
+                pass
+            # if item is greater than the node.right.data
+            else:
+                # right-Left case
+                pass
