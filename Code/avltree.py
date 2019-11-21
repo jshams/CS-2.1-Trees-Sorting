@@ -25,3 +25,18 @@ class AVLNode(object):
 
     def has_right(self):
         return self.right is not None
+
+
+class AVLTree(object):
+    def __init__(self, items=None):
+        self.root = None
+        self.size = 0
+        if items is not None:
+            for item in items:
+                self.insert(item)
+
+    def is_empty(self):
+        return self.root is None
+
+    def insert(self, item):
+        pass
