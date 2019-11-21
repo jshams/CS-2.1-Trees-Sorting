@@ -93,15 +93,27 @@ class AVLTree(object):
     def insert(self, item, node=None):
         '''recursively insert a node in this tree, keeping track of its
         path and balancing each node on your way back up to the root'''
-        if self.root is None:
+        # check if the tree is empty
+        if self.is_empty():
+            # if so add the first node as the root
             self.root = AVLNode(item)
+            # increment size by 1
             self.size += 1
-        if node is None:
-            node = self.root
-            self.size += 1
-        if item == node.data:
-            self.size -= 1
+            # stop insertion
             return
+        # check if node is none (first method call)
+        if node is None:
+            # if so start from the root
+            node = self.root
+            # increase the size by 1 (this only happens once per insertion)
+            self.size += 1
+        # if the item is equal to this nodes data
+        if item == node.data:
+            # the items  already exists in the tree, decrenent size by 1
+            self.size -= 1
+            # stop insertion
+            return
+        # otherwise if the item is less than the current node
         elif item < node.data:
             # check if there is something in the nodes left spot
             if node.has_left():
@@ -111,11 +123,13 @@ class AVLTree(object):
                 if new_subtree is not None:
                     # if so update its left child with the new subtree
                     node.left = new_subtree
-            # otherwise
+            # otherwise (the node has no left child)
             else:
-                # add the new node to the left
+                # instantiate a new node object with item
                 new_node = AVLNode(item)
+                # add the new node to the left
                 node.left = new_node
+        # otherwise (the item is greater than the current node)
         else:
             # check if there is something in the nodes right spot
             if node.has_right():
@@ -125,10 +139,11 @@ class AVLTree(object):
                 if new_subtree is not None:
                     # if so update its left child with the new subtree
                     node.right = new_subtree
-            # otherwise
+            # otherwise (the node has no right child))
             else:
-                # add the new node to the right
+                # instantiate a new node object with item
                 new_node = AVLNode(item)
+                # add the new node to the right
                 node.right = new_node
         # update the weights of the node
         node.update_height()
