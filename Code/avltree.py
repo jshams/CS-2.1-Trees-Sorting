@@ -3,30 +3,38 @@ from collections import deque
 
 class AVLNode(object):
     def __init__(self, data):
+        '''initialize an AVL node object with its data'''
         self.data = data
         self.left = None
         self.right = None
         self.height = 0
 
     def __repr__(self):
+        '''return a string representation of this node'''
         return 'AvlNode({!r})'.format(self.data)
 
     def __eq__(self, other_node):
+        '''determine if two nodes are equal by checking if their data attr is the same'''
         return self.data == other_node.data
 
     def is_leaf(self):
+        '''return a boolean indicating whether this node is a leaf'''
         return self.left is None and self.right is None
 
     def is_branch(self):
+        '''return a boolean indicating whether this node is a branch'''
         return not self.is_leaf()
 
     def has_left(self):
+        '''return a boolean indicating whether this node has a left child'''
         return self.left is not None
 
     def has_right(self):
+        '''return a boolean indicating whether this node has a right child'''
         return self.right is not None
 
     def update_height(self):
+        '''update the nodes height based on the heights of its children'''
         if self.is_leaf():
             self.height = 0
         elif not self.has_left():
@@ -40,6 +48,7 @@ class AVLNode(object):
                 self.height = self.right.height + 1
 
     def balance_factor(self):
+        '''return an integer indicating the balance factor of this node'''
         if self.is_leaf():
             return 0
         elif not self.has_right():
@@ -50,6 +59,7 @@ class AVLNode(object):
             return self.right.height - self.left.height
 
     def right_rotate(self):
+        '''perform a right roation from this node and return the new root'''
         left_node = self.left
         self.left = left_node.right
         left_node.right = self
@@ -58,6 +68,7 @@ class AVLNode(object):
         return left_node
 
     def left_rotate(self):
+        '''perform a left rotation from this node and return the new root'''
         right_node = self.right
         self.right = right_node.left
         right_node.left = self
@@ -68,6 +79,7 @@ class AVLNode(object):
 
 class AVLTree(object):
     def __init__(self, items=None):
+        '''initialize an AVL tree object with optional items'''
         self.root = None
         self.size = 0
         if items is not None:
@@ -75,9 +87,12 @@ class AVLTree(object):
                 self.insert(item)
 
     def is_empty(self):
+        '''return a boolean indicating if this tree is empty'''
         return self.root is None
 
     def insert(self, item, node=None):
+        '''recursively insert a node in this tree, keeping track of its
+        path and balancing each node on your way back up to the root'''
         if self.root is None:
             self.root = AVLNode(item)
             self.size += 1
@@ -121,6 +136,9 @@ class AVLTree(object):
         return self.balance(node)
 
     def balance(self, node):
+        '''given a node, determine its balance factor and if it is above 1 or
+        below -1 balance that subtree. return the new root or None if no balancing 
+        actions are necessary'''
         # get the node's balance factor
         balance_factor = node.balance_factor()
         # check if the node's subtree is balanced
@@ -155,6 +173,7 @@ class AVLTree(object):
         return new_root
 
     def items_in_order(self):
+        '''return a list of items in order'''
         items = []
         if not self.is_empty():
             # Traverse tree in-order from root, appending each node's item
@@ -163,6 +182,7 @@ class AVLTree(object):
         return items
 
     def items_level_order(self):
+        '''return a list of items in level order'''
         items = []
         if not self.is_empty():
             # Traverse tree in-order from root, appending each node's item
@@ -170,11 +190,20 @@ class AVLTree(object):
         # Return level-order list of all items in tree
         return items
 
+    def _traverse_in_order_recursive(self, node, visit):
+        '''recursively traverse each node of this tree in order (DFS)
+        calling a visit function on each node'''
+        if node.has_left():
+            self._traverse_in_order_recursive(node.left, visit)
+        # Visit this node's data with given function
+        visit(node.data)
+        # Traverse right subtree, if it exists
+        if node.has_right():
+            self._traverse_in_order_recursive(node.right, visit)
+
     def _traverse_level_order(self, start_node, visit):
-        """Traverse this binary tree with iterative level-order traversal (BFS).
-        Start at the given node and visit each node with the given function.
-        Running time: O(n) because we must visit each node
-        Memory usage: Worse case: O(n) if all the nodes are children of one another"""
+        '''Traverse this binary tree with iterative level-order traversal (BFS).
+        Start at the given node and visit each node with the given function.'''
         # Create queue to store nodes not yet traversed in level-order
         queue = deque()
         # Enqueue given starting node
@@ -191,15 +220,6 @@ class AVLTree(object):
             # Enqueue this node's right child, if it exists
             if node.right is not None:
                 queue.append(node.right)
-
-    def _traverse_in_order_recursive(self, node, visit):
-        if node.has_left():
-            self._traverse_in_order_recursive(node.left, visit)
-        # Visit this node's data with given function
-        visit(node.data)
-        # Traverse right subtree, if it exists
-        if node.has_right():
-            self._traverse_in_order_recursive(node.right, visit)
 
 
 if __name__ == '__main__':
