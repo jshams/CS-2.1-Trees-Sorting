@@ -35,7 +35,7 @@ def split_sort_merge(items):
     For instance 4^2 = 16, but (4/2^2) = 4. 100^2 = 10000, but 50^2 = 2500
     Memory usage: ??? Why and under what conditions?"""
     # Split items list into approximately equal halves
-    middle = len(items // 2)
+    middle = len(items) // 2
     first_half = items[:middle]
     second_half = items[middle:]
     # Sort each half using any other sorting algorithm
