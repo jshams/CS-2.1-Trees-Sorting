@@ -162,7 +162,7 @@ class AVLTree(object):
             return None
         # check if the tree is skewed left
         if balance_factor < -1:
-            # If item is less than the node.left
+            # if item is less than the node.left
             if node.left.balance_factor() < 0:
                 # left-left case
                 new_root = node.right_rotate()
@@ -171,7 +171,7 @@ class AVLTree(object):
                 node.left = node.left.left_rotate()
                 new_root = node.right_rotate()
         else:  # balance factor is positive (tree skewed right)
-            # If item is less than node.right.data
+            # if item is less than node.right.data
             if node.right.balance_factor() > 0:
                 # right-right case,
                 new_root = node.left_rotate()
@@ -191,18 +191,18 @@ class AVLTree(object):
         '''return a list of items in order'''
         items = []
         if not self.is_empty():
-            # Traverse tree in-order from root, appending each node's item
+            # traverse tree in-order from root, appending each node's item
             self._traverse_in_order_recursive(self.root, items.append)
-        # Return in-order list of all items in tree
+        # return in-order list of all items in tree
         return items
 
     def items_level_order(self):
         '''return a list of items in level order'''
         items = []
         if not self.is_empty():
-            # Traverse tree in-order from root, appending each node's item
+            # traverse tree in-order from root, appending each node's item
             self._traverse_level_order(self.root, items.append)
-        # Return level-order list of all items in tree
+        # return level-order list of all items in tree
         return items
 
     def _traverse_in_order_recursive(self, node, visit):
@@ -210,29 +210,29 @@ class AVLTree(object):
         calling a visit function on each node'''
         if node.has_left():
             self._traverse_in_order_recursive(node.left, visit)
-        # Visit this node's data with given function
+        # visit this node's data with given function
         visit(node.data)
-        # Traverse right subtree, if it exists
+        # traverse right subtree, if it exists
         if node.has_right():
             self._traverse_in_order_recursive(node.right, visit)
 
     def _traverse_level_order(self, start_node, visit):
         '''Traverse this binary tree with iterative level-order traversal (BFS).
         Start at the given node and visit each node with the given function.'''
-        # Create queue to store nodes not yet traversed in level-order
+        # create queue to store nodes not yet traversed in level-order
         queue = deque()
-        # Enqueue given starting node
+        # enqueue given starting node
         queue.append(start_node)
-        # Loop until queue is empty
+        # loop until queue is empty
         while len(queue) is not 0:
-            # Dequeue node at front of queue
+            # dequeue node at front of queue
             node = queue.popleft()
-            # Visit this node's data with given function
+            # visit this node's data with given function
             visit(node.data)
-            # Enqueue this node's left child, if it exists
+            # enqueue this node's left child, if it exists
             if node.left is not None:
                 queue.append(node.left)
-            # Enqueue this node's right child, if it exists
+            # enqueue this node's right child, if it exists
             if node.right is not None:
                 queue.append(node.right)
 
