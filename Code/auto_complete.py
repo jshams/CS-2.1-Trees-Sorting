@@ -1,7 +1,7 @@
 class DictNode():
-    def __init__(self, letter):
-        '''Initialize a node object with its letter'''
-        self.letter = letter
+    def __init__(self, character):
+        '''Initialize a node object with its character'''
+        self.character = character
         self.children = dict()
         self.terminal = False
 
@@ -13,54 +13,58 @@ class DictNode():
         '''return a boolean indicating whether this node is terminal'''
         return self.terminal
 
-    def has_child(self, letter):
-        '''returns a boolean indicating whether this node has letter as a child'''
-        return letter in self.children
+    def has_child(self, character):
+        '''returns a boolean indicating whether this node has character as a child'''
+        return character in self.children
 
-    def add_child(self, letter):
-        '''adds a letter to its children if it isnt already a child'''
-        if not self.has_child(letter):
-            self.children[letter] = Node(letter)
+    def add_child(self, character):
+        '''adds a character to its children if it isnt already a child'''
+        if not self.has_child(character):
+            self.children[character] = Node(character)
 
-    def get_child(self, letter):
-        '''returns the child node associated with the letter value'''
-        return self.children[letter]
+    def get_child(self, character):
+        '''returns the child node associated with the character value'''
+        return self.children[character]
 
     def get_children(self):
-        '''generator that yields each child letter in this nodes children'''
+        '''generator that yields each child character in this nodes children'''
         for child in self.children:
             yield child
+    
+    def num_children(self):
+        '''returns an integer denoting the number of children this node has'''
+        return len(self.children)
 
 
 class ListNode():
-    def __init__(self, letter):
-        '''Initialize a node object with its letter'''
-        self.letter = letter
+    def __init__(self, character):
+        '''Initialize a node object with its character'''
+        self.character = character
         self.children = [None] * 26
         self.terminal = False
         # use a small amount of extra memory to save lots of time
         self.children_letters = ''
 
-    def get_char_index(self, letter):
-        '''returns the index of a the placement of a letter in children list'''
-        return ord(letter.lower()) - 97
+    def get_char_index(self, character):
+        '''returns the index of a the placement of a character in children list'''
+        return ord(character.lower()) - 97
 
-    def has_child(self, letter):
-        '''returns a boolean indicating whether this node has letter as a child'''
-        letter_index = self.get_char_index(letter)
+    def has_child(self, character):
+        '''returns a boolean indicating whether this node has character as a child'''
+        letter_index = self.get_char_index(character)
         return self.children[letter_index] is not None
 
-    def add_child(self, letter):
-        '''adds a letter to its children if it isnt already a child'''
-        letter_index = self.get_char_index(letter)
+    def add_child(self, character):
+        '''adds a character to its children if it isnt already a child'''
+        letter_index = self.get_char_index(character)
         if self.children[letter_index] is None:
-            new_child_node = ListNode(letter)
+            new_child_node = ListNode(character)
             self.children[letter_index] = new_child_node
-            self.children_letters += letter
+            self.children_letters += character
 
-    def get_child(self, letter):
-        '''returns the child node associated with the letter value'''
-        letter_index = self.get_char_index(letter)
+    def get_child(self, character):
+        '''returns the child node associated with the character value'''
+        letter_index = self.get_char_index(character)
         return self.children[letter_index]
 
     def is_terminal(self):
@@ -68,55 +72,70 @@ class ListNode():
         return self.terminal
 
     def get_children(self):
-        '''generator that yields each child letter in this nodes children'''
+        '''generator that yields each child character in this nodes children'''
         for child in self.children_letters:
             yield child
+    
+    def num_children(self):
+        '''returns an integer denoting the number of children this node has'''
+        return sum([character is not None for character in self.children])
 
 
 class Trie():
     def __init__(self, word_list=None):
         '''initialize a Trie tree with a list of words'''
-        self.root = dict([(letter, Node(letter))
-                          for letter in 'abcdefghijklmnopqrstuvwxyz'])
-        self.word_count = 0
+        self.root = Node('^')
+        self.size = 0
         if word_list is not None:
             self.add_words(word_list)
+    
+    def is_empty(self):
+        return self.size == 0
 
     def add_words(self, word_list):
         '''given a list of words, add each one to the tree'''
         for word in word_list:
-            self.add_word(word.lower())
+            self.insert(word.lower())
 
-    def add_word(self, word):
+    def insert(self, word):
         '''adds a single word to the tree'''
-        first_letter = True
-        node = None
-        for letter in word:
-            if not letter.isalpha():
+        node = self.root
+        for character in word:
+            if not character.isalpha():
                 continue
-            elif first_letter:
-                node = self.root[letter]
-                first_letter = False
             else:
-                node.add_child(letter)
-                node = node.get_child(letter)
-        node.terminal = True
+                node.add_child(character)
+                node = node.get_child(character)
+        if not node.is_terminal():
+            node.terminal = True
+            self.size += 1
+
+    
+    def contains(self, word):
+        '''returns a boolean indicating whether that word is in this trie'''
+        node = self.root
+        for character in word:
+            if not character.isalpha():
+                return False
+            else:
+                if node.has_child(character):
+                    node = node.get_child(character)
+                else:
+                    return False
+        return node.is_terminal()
 
     def _get_final_node(self, prefix):
         '''given a prefix this will return the node of the last
-        letter in the prefix'''
-        first_letter = True
-        if prefix == '':
-            return None
-        for letter in prefix:
-            if not letter.isalpha():
+        character in the prefix'''
+        # if prefix == '':
+        #     return self.root
+        node = self.root
+        for character in prefix:
+            if not character.isalpha():
                 return None
-            if first_letter:
-                node = self.root[letter]
-                first_letter = False
             else:
-                if node.has_child(letter):
-                    node = node.get_child(letter)
+                if node.has_child(character):
+                    node = node.get_child(character)
                 else:
                     return None
         return node
@@ -128,9 +147,9 @@ class Trie():
         all_combos = []
         if node.is_terminal():
             all_combos.append(prefix)
-        for child_letter in node.get_children():
+        for child_character in node.get_children():
             all_combos.extend(self._complete(
-                node.get_child(child_letter), prefix + child_letter))
+                node.get_child(child_character), prefix + child_character))
         return all_combos
 
     def auto_complete(self, prefix):
@@ -142,13 +161,17 @@ class Trie():
             return []
         words = self._complete(node, prefix)
         return words
+    
+    def strings(self):
+        '''will return a list of all words in this trie'''
+        return self.auto_complete('')
 
 
 class AutoComplete():
     def __init__(self, dict_path='/usr/share/dict/words'):
         '''initialize an autocomplete class with a file path to a 
         txt file containing words'''
-        self.word_count = 0
+        self.size = 0
         self.word_list = self.get_words_from_file(dict_path)
         self.trie_tree = Trie(self.word_list)
 
@@ -158,7 +181,7 @@ class AutoComplete():
         word_list = []
         for word in f.readlines():
             word_list.append(word.strip())
-            self.word_count += 1
+            self.size += 1
         return word_list
 
     def auto_complete(self, prefix):
@@ -180,7 +203,7 @@ def main():
     ac = AutoComplete()
     print('Time to build trie:' + green, str(
         round(time() - start, 3)) + ' seconds')
-    print(blue + 'Number of words:' + green, ac.word_count)
+    print(blue + 'Number of words:' + green, ac.size)
     while True:
         print(blue + 'Enter a lowercase prefix to find words with that prefix: ' +
               red + '(Q to quit)')
@@ -191,10 +214,12 @@ def main():
             sleep(1)
             return
         else:
+            now = time()
             words = ac.auto_complete(pref)
             # words = [word if 'supreme' not in word else red +
             #          word + green for word in words]
             print(green + ', '.join(words))
+            print(f'time: {round((time() - now) * 1000, 4)}ms')
             print(blue)
 
 
@@ -214,9 +239,8 @@ def time_it():
         round(time() - start, 3))))
     sleep(1)
 
-
+Node = ListNode
 if __name__ == '__main__':
-    # Node = DictNode
-    Node = ListNode
-    # main()
-    time_it()
+    # Node = ListNode
+    main()
+    # time_it()
