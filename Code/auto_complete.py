@@ -21,9 +21,13 @@ class DictNode():
         '''adds a character to its children if it isnt already a child'''
         if not self.has_child(character):
             self.children[character] = Node(character)
+        else:
+            raise ValueError(f'DictNode object already has child "{character}"')
 
     def get_child(self, character):
         '''returns the child node associated with the character value'''
+        if character not in self.children:
+            raise ValueError(f'DictNode object has no child "{character}"')
         return self.children[character]
 
     def get_children(self):
@@ -61,10 +65,14 @@ class ListNode():
             new_child_node = ListNode(character)
             self.children[letter_index] = new_child_node
             self.children_letters += character
+        else:
+            raise ValueError(f'ListNode object already has child "{character}"')
 
     def get_child(self, character):
         '''returns the child node associated with the character value'''
         letter_index = self.get_char_index(character)
+        if self.children[letter_index] is None:
+            raise ValueError(f'ListNode object has no child "{character}"')
         return self.children[letter_index]
 
     def is_terminal(self):
