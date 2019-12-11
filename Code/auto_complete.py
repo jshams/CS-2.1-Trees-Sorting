@@ -112,7 +112,8 @@ class Trie():
             if not character.isalpha():
                 continue
             else:
-                node.add_child(character)
+                if not node.has_child(character):
+                    node.add_child(character)
                 node = node.get_child(character)
         if not node.is_terminal():
             node.terminal = True
