@@ -1,7 +1,7 @@
 #!python3
 
 from auto_complete import Trie as PrefixTree
-from auto_complete import DictNode as PrefixTreeNode
+
 import unittest
 
 

@@ -228,7 +228,7 @@ def main():
             # words = [word if 'supreme' not in word else red +
             #          word + green for word in words]
             print(green + ', '.join(words))
-            print(f'time: {round((time() - now) * 1000, 4)}ms')
+            print(f'{blue}time: {green}{round((time() - now) * 1000, 4)}ms')
             print(blue)
 
 
@@ -248,7 +248,7 @@ def time_it():
         round(time() - start, 3))))
     sleep(1)
 
-Node = ListNode
+Node = DictNode
 if __name__ == '__main__':
     # Node = ListNode
     main()
