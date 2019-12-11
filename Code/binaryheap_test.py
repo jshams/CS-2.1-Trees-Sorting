@@ -1,6 +1,6 @@
 #!python
 
-from binaryheap import BinaryMinHeap
+from binaryheap import BinaryMinHeap, heap_sort
 import random
 import unittest
 
@@ -110,6 +110,30 @@ class TestBinaryMinHeap(unittest.TestCase):
         assert heap._right_child_index(5) == 12
         assert heap._left_child_index(6) == 13
         assert heap._right_child_index(6) == 14
+    
+    def has_heap_order(self, items):
+        for i in range(len(items) - 1, 0, -1):
+            parent_index = (i - 1) >> 1
+            if items[i] < items[parent_index]:
+                print(items[i], items[parent_index])
+                return False
+        return True
+
+    def test_heapify(self):
+        items = random.sample(range(1000), 6)
+        heap = BinaryMinHeap(items)
+        assert self.has_heap_order(heap.items) is True
+        items = [0,3,6,4,5,8,9]
+        assert self.has_heap_order(items)
+
+    def test_heap_sort(self):
+        items = [5,2,0,1,3,4]
+        heap_sort(items)
+        assert items == [0,1,2,3,4,5]
+        items = random.sample(range(1000), 5)
+        sorted_items = sorted(items)
+        heap_sort(items)
+        assert items == sorted_items
 
 
 if __name__ == '__main__':
