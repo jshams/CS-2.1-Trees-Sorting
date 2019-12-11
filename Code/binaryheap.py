@@ -7,13 +7,11 @@ class BinaryMinHeap(object):
     Items are stored in a dynamic array that implicitly represents a complete
     binary tree with root node at index 0 and last leaf node at index n-1."""
 
-    def __init__(self, items=None):
+    def __init__(self, items=[]):
         """Initialize this heap and insert the given items, if any."""
         # Initialize an empty list to store the items
-        self.items = []
-        if items:
-            for item in items:
-                self.insert(item)
+        self.items = items[::]
+        self.heapify()
 
     def __repr__(self):
         """Return a string representation of this heap."""
@@ -114,35 +112,26 @@ class BinaryMinHeap(object):
         if not (0 <= index <= self._last_index()):
             raise IndexError('Invalid index: {}'.format(index))
         item = self.items[index]
-        print(index,'\t', len(self.items))
         # Get the index of the item's left and right children
         left_index = self._left_child_index(index)
         right_index = self._right_child_index(index)
-        if left_index > self._last_index():
-            return  # This index is a leaf node (does not have any children)
-        else:
-            if right_index > self._last_index():
-                if self.items[left_index] < item:
-                    swap_index = left_index
-                else:
-                    return
-            else:
-                left_child = self.items[left_index]
-                right_child = self.items[right_index]
-                if item > left_child or item > right_child:
-                    if left_child < right_child:
-                        # swap with the left child
-                        swap_index = left_index
-                    else:
-                        swap_index = right_index
-                else:
-                    return
-        self.items_swap(index, swap_index)
-        self._bubble_down(swap_index)
+        largest = index
+        if left_index <= self._last_index() and self.items[left_index] < item:
+            largest = left_index
+        if right_index <= self._last_index() and self.items[right_index] < self.items[largest]:
+            largest = right_index
+        if largest != index:
+            self.items_swap(index, largest)
+            if not self._is_leaf(largest):
+                self._bubble_down(largest)
 
     def _last_index(self):
         """Return the last valid index in the underlying array of items."""
         return len(self.items) - 1
+    
+    def _is_leaf(self, index):
+        if self._left_child_index(index) >= self.size():
+            return True
 
     def _parent_index(self, index):
         """Return the parent index of the item at the given index."""
@@ -157,7 +146,18 @@ class BinaryMinHeap(object):
     def _right_child_index(self, index):
         """Return the right child index of the item at the given index."""
         return (index << 1) + 2  # Shift left to multiply by 2
+    
+    def heapify(self):
+        """turn an array in arbitrary order to follow heap ordering properties"""
+        last_branch_index = (self.size() - 1) >> 1
+        for index in range(last_branch_index, -1, -1):
+            self._bubble_down(index)
 
+def heap_sort(items):
+    """sorts items in place using heap sort"""
+    item_heap = BinaryMinHeap(items)
+    for i in range(len(items)):
+        items[i] = item_heap.delete_min()
 
 def test_binary_min_heap():
     # Create a binary min heap of 7 items
@@ -185,5 +185,5 @@ def test_binary_min_heap():
 
 
 if __name__ == '__main__':
-    # test_binary_min_heap()
-    pass
+    test_binary_min_heap()
+    # pass
