@@ -62,5 +62,23 @@ class PriorityQueue(object):
         self.heap._bubble_down(0)
         return popped_item[1]
 
+def test():
+    # sentance split into a list of words
+    words = 'hello world today it is raining'.split(' ')
+    print(' '.join(words))
+    q = PriorityQueue()
+    # add all the words in the sentence to the queue
+    for i, word in enumerate(words):
+        # have their priority go in descending order
+        q.enqueue(word, 10 - i)
+        assert q.size() == i + 1
+    assert q.front() == 'raining'
+    # dequeue the words in order in a new list
+    reversed_words = []
+    for _ in range(len(words)):
+        reversed_words.append(q.dequeue())
+    assert reversed_words == words[::-1]
+    print(' '.join(reversed_words))
+
 if __name__ == '__main__':
-    pass
+    test()
