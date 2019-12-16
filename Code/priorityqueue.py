@@ -15,7 +15,11 @@ class PriorityQueue(object):
 
     def __repr__(self):
         """Return a string representation of this priority queue."""
-        return 'PriorityQueue({} items, front={})'.format(self.size(), self.front())
+        return 'PriorityQueue({} items, front={})'.format(self.size, self.front())
+
+    def size(self):
+        """returns the number of items in the queue"""
+        return self.heap.size()
 
     def is_empty(self):
         """Return True if this priority queue is empty, or False otherwise."""
@@ -25,27 +29,27 @@ class PriorityQueue(object):
         """Return the number of items in this priority queue."""
         return self.heap.size()
 
-    def enqueue(self, item, priority):
+    def enqueue(self, item, priority=0):
         """Insert the given item into this priority queue in order according to
         the given priority."""
-        # TODO: Insert given item into heap in order according to given priority
-        # ...
+        # Insert given item into heap in order according to given priority
+        self.heap.insert((priority, item))
 
     def front(self):
         """Return the item at the front of this priority queue without removing
         it, or None if this priority queue is empty."""
         if self.size() == 0:
             return None
-        # TODO: Return minimum item from heap
-        # ...
+        # Return minimum item from heap
+        return self.heap.get_min()[1]
 
     def dequeue(self):
         """Remove and return the item at the front of this priority queue,
         or raise ValueError if this priority queue is empty."""
         if self.size() == 0:
             raise ValueError('Priority queue is empty and has no front item')
-        # TODO: Remove and return minimum item from heap
-        # ...
+        # Remove and return minimum item from heap
+        return self.heap.delete_min()[1]
 
     def push_pop(self, item, priority):
         """Remove and return the item at the front of this priority queue,
@@ -53,5 +57,10 @@ class PriorityQueue(object):
         This method is more efficient than calling dequeue and then enqueue."""
         if self.size() == 0:
             raise ValueError('Priority queue is empty and has no front item')
-        # TODO: Replace and return minimum item from heap
-        # ...
+        # Replace and return minimum item from heap
+        self.heap.items[0], popped_item = (priority, item), self.heap.items[0]
+        self.heap._bubble_down(0)
+        return popped_item[1]
+
+if __name__ == '__main__':
+    pass
